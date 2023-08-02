@@ -8,7 +8,7 @@ export class AddressEntity {
     @Column({ name: 'user_id', type: 'integer', nullable: false })
     userId: number;
 
-    @Column({ name: 'complement', type: 'varchar' })
+    @Column({ name: 'complement', type: 'varchar', nullable: true })
     complement: string;
 
     @Column({ name: 'number', type: 'integer', nullable: false })
