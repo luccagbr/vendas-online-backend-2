@@ -47,6 +47,20 @@ export class UserService {
         })
     }
     
+    async findUserByEmail(email: string) {
+        const user = this.userRepository.findOne({
+            where: {
+                email
+            }
+        });
+
+        if(!user) {
+            throw new NotFoundException('Email not found')
+        }
+
+        return user;
+    }
+
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
         const saltDrRounds = 10;
 
