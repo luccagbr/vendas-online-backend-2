@@ -7,11 +7,14 @@ import { CityModule } from './city/city.module';
 import { AddressModule } from './address/address.module';
 import { CacheModule } from './cache/cache.module';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guards';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development.local']
+      envFilePath: ['.env.development.local'],
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -30,8 +33,14 @@ import { AuthModule } from './auth/auth.module';
     CityModule,
     AddressModule,
     CacheModule,
+    JwtModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
