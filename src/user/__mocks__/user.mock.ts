@@ -1,7 +1,7 @@
 import { UserEntity } from "../entities/user.entity";
 import { UserType } from "../enum/user-type.enum";
 
-export const userEntityMock: UserEntity = {
+export const userMockEntity: UserEntity = {
     cpf: "83427492374",
     createdAt: new Date(),
     email: "email@gmail.com",
