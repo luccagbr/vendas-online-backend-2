@@ -20,9 +20,9 @@ export class CityEntity {
     updatedAt: Date;
 
     @OneToMany(() => AddressEntity, (address) => address.city)
-    addresses: AddressEntity[];
+    addresses?: AddressEntity[];
 
     @ManyToOne(() => StateEntity, (state) => state.cities)
     @JoinColumn({ name: "state_id", referencedColumnName: "id" })
-    state: StateEntity;
+    state?: StateEntity;
 }
