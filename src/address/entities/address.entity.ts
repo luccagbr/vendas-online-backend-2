@@ -1,38 +1,38 @@
-import { CityEntity } from "src/city/entities/city.entity";
-import { UserEntity } from "src/user/entities/user.entity";
+import { CityEntity } from "../../city/entities/city.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'address'})
+@Entity({ name: "address" })
 export class AddressEntity {
-    @PrimaryGeneratedColumn('rowid')
+    @PrimaryGeneratedColumn("rowid")
     id: number;
 
-    @Column({ name: 'user_id', type: 'integer', nullable: false })
+    @Column({ name: "user_id", type: "integer", nullable: false })
     userId: number;
 
-    @Column({ name: 'complement', type: 'varchar', nullable: true })
+    @Column({ name: "complement", type: "varchar", nullable: true })
     complement: string;
 
-    @Column({ name: 'number', type: 'integer', nullable: false })
+    @Column({ name: "number", type: "integer", nullable: false })
     numberAddress: number;
 
-    @Column({ name: 'cep', type: 'varchar', nullable: false })
+    @Column({ name: "cep", type: "varchar", nullable: false })
     cep: string;
 
-    @Column({ name: 'city_id', type: 'integer', nullable: false })
+    @Column({ name: "city_id", type: "integer", nullable: false })
     cityId: number;
 
-    @CreateDateColumn({ name: 'created_at' })
+    @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
-    @CreateDateColumn({ name: 'updated_at'})
+    @CreateDateColumn({ name: "updated_at" })
     updatedAt: Date;
 
     @ManyToOne(() => UserEntity, (user) => user.addresses)
-    @JoinColumn({ name: 'user_id', referencedColumnName: 'id'})
+    @JoinColumn({ name: "user_id", referencedColumnName: "id" })
     user?: UserEntity;
 
     @ManyToOne(() => CityEntity, (city) => city.addresses)
-    @JoinColumn({ name: 'city_id', referencedColumnName: 'id' })
+    @JoinColumn({ name: "city_id", referencedColumnName: "id" })
     city?: CityEntity;
 }
