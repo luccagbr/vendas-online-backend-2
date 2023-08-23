@@ -39,12 +39,12 @@ describe("CategoryService", () => {
     });
 
     it("should return error list category empty", async () => {
-        jest.spyOn(categoryRepository, "find").mockRejectedValue([]);
+        jest.spyOn(categoryRepository, "find").mockResolvedValue([]);
 
         expect(service.findAllCategories()).rejects.toThrowError();
     });
 
-    it("should return error list category empty", async () => {
+    it("should return error list category exception", async () => {
         jest.spyOn(categoryRepository, "find").mockRejectedValue(new Error());
 
         expect(service.findAllCategories()).rejects.toThrowError();
