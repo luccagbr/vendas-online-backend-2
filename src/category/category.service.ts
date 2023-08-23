@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CategoryEntity } from "./entities/category.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateCategoryDto } from "./dto/create-category.dto";
 
 @Injectable()
 export class CategoryService {
@@ -18,5 +19,28 @@ export class CategoryService {
         }
 
         return categories;
+    }
+
+    async findCategoryByName(name: string): Promise<CategoryEntity> {
+        const category = await this.categoryRepository.findOne({
+            where: {
+                name,
+            },
+        });
+
+        if (!category) {
+            throw new NotFoundException(`Category name: ${name} not found`);
+        }
+        return category;
+    }
+
+    async createCategory(createCategory: CreateCategoryDto) {
+        const category = await this.findCategoryByName(createCategory.name).catch(() => undefined);
+
+        if (category) {
+            throw new BadRequestException("There are category name records");
+        }
+
+        return await this.categoryRepository.save(createCategory);
     }
 }
