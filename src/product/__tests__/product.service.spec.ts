@@ -4,6 +4,7 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { ProductService } from "../product.service";
 import { ProductEntity } from "../entities/product.entity";
 import { productMockEntity } from "../__mocks__/product.mock";
+import { createProductMock } from "../__mocks__/create-product.mock";
 
 describe("ProductService", () => {
     let service: ProductService;
@@ -45,6 +46,14 @@ describe("ProductService", () => {
     });
 
     it("should return error in exception", () => {
+        jest.spyOn(productRepository, "find").mockRejectedValue(new Error());
+
+        expect(service.findAll()).rejects.toThrowError();
+    });
+
+    it("should return product after insert in DB", async () => {
+        const product = await service.createProduct(createProductMock);
+
         jest.spyOn(productRepository, "find").mockRejectedValue(new Error());
 
         expect(service.findAll()).rejects.toThrowError();

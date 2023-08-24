@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { Roles } from "src/decorators/roles.decorator";
 import { UserType } from "src/user/enum/user-type.enum";
@@ -18,8 +18,10 @@ export class ProductController {
         });
     }
 
+    @Roles(UserType.Admin)
+    @UsePipes(ValidationPipe)
     @Post()
-    async createProduct(@Body() params: CreateProductDto) {
-        return "Teste";
+    async createProduct(@Body() createProduct: CreateProductDto): Promise<ProductEntity> {
+        return this.productService.createProduct(createProduct);
     }
 }
