@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException, BadGatewayException } from "@nestjs/common";
+import { Injectable, NotFoundException, BadGatewayException, BadRequestException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UserEntity } from "./entities/user.entity";
 import { hash } from "bcrypt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReturnUserDto } from "./dto/return-user.dto";
 import { UserType } from "./enum/user-type.enum";
+import { UpdatePasswordDto } from "./dto/update-password.dto";
+import { createPasswordHashed, validatePassword } from "../utils/password";
 
 @Injectable()
 export class UserService {
@@ -63,18 +64,34 @@ export class UserService {
 
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
         const user = await this.findUserByEmail(createUserDto.email).catch(() => undefined);
-        const saltDrRounds = 10;
 
         if (user) {
             throw new BadGatewayException("email registered in system");
         }
 
-        const passwordCrypt = await hash(createUserDto.password, saltDrRounds);
+        const passwordCrypt = await createPasswordHashed(createUserDto.password);
 
         return this.userRepository.save({
             ...createUserDto,
             type_user: UserType.User,
             password: passwordCrypt,
+        });
+    }
+
+    async updatePasswordUser(updatePassword: UpdatePasswordDto, userId: number): Promise<UserEntity> {
+        const user = await this.getUserById(userId);
+
+        const passwordHashed = await createPasswordHashed(updatePassword.newPassword);
+
+        const isMatch = await validatePassword(updatePassword.lastPassword, user.password || "");
+
+        if (!isMatch) {
+            throw new BadRequestException("Last password invalid");
+        }
+
+        return this.userRepository.save({
+            ...user,
+            password: passwordHashed,
         });
     }
 }
