@@ -1,5 +1,14 @@
+import { CartEntity } from "src/cart/entities/cart.entity";
 import { AddressEntity } from "../../address/entities/address.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm";
 
 @Entity({ name: "user" })
 export class UserEntity {
@@ -27,9 +36,12 @@ export class UserEntity {
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
-    @CreateDateColumn({ name: "updated_at" })
+    @UpdateDateColumn({ name: "updated_at" })
     updatedAt: Date;
 
     @OneToMany(() => AddressEntity, (address) => address.user)
     addresses?: AddressEntity[];
+
+    @OneToMany(() => CartEntity, (cart_entity) => cart_entity.user)
+    cart?: CartEntity[];
 }
