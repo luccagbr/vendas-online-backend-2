@@ -19,6 +19,9 @@ export class CartEntity {
     @Column({ name: "user_id", nullable: false, type: "integer" })
     userId: number;
 
+    @Column({ name: "is_active", nullable: false, type: "boolean" })
+    isActive: boolean;
+
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date;
 
@@ -26,7 +29,7 @@ export class CartEntity {
     updatedAt: Date;
 
     @OneToMany(() => CartProductEntity, (cart_product_entity) => cart_product_entity.cart)
-    cartProduct: CartProductEntity[];
+    cartProduct?: CartProductEntity[];
 
     @ManyToOne(() => UserEntity, (user_entity) => user_entity.cart)
     @JoinColumn({ name: "user_id", referencedColumnName: "id" })
